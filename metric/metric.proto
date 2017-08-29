@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package metric;
+
+import "google/protobuf/timestamp.proto";
+
+service MetricService {
+  // Client sends a stream of metrics <UID,count> to save to db
+  rpc SetMetric (stream SetRequest) returns (Status) {}
+  // Client sends a <UID> and N point request to return metrics for N time intervals
+  rpc GetMetric (GetRequest) returns (MetricData) {}
+}
+
+message SetRequest {
+  string uid = 1;
+  int64 count = 2;
+}
+
+message GetRequest {
+  string uid = 1;
+  google.protobuf.Timestamp fromTime = 2;
+  google.protobuf.Timestamp toTime = 3;
+  int64 interval = 4;
+}
+
+message MetricData {
+  string uid = 1;
+  repeated int64 counts = 2;
+}
+
+message Status {
+  int64 retStatus = 1;
+}

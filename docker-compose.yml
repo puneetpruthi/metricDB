@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+  app:
+    image: golang:1.9.0-alpine
+    volumes:
+      - .:/go/src/server
+    working_dir: /go/src/server
+    command: go run main.go
+    ports:
+      - "6000:6000"
+    links:
+      - redis
+  
+  redis:
+    image: redis:alpine            
